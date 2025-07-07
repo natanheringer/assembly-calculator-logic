@@ -5,17 +5,24 @@ section .data
     prompt2 db "Enter the next number: ", 0xA
     len_prompt2 equ $ - prompt2
 
-    prompt_op db "Enter the desired operation (+, -, *): ", 0xA
+    prompt_op db "Enter the desired operation (+, -, * or /): ", 0xA
     len_prompt_op equ $ - prompt_op
 
     result_msg db "Result: ", 0xA
     len_result_msg equ $ - result_msg
+
+    separator db "=============================================", 0xA
+    len_separator equ $ - separator 
+
+    newline db 0xA
+    len_newline equ $ - newline 
 
 section .bss 
     num1 resb 10
     num2 resb 10
     op resb 2
     result resb 20
+    
 
 section .text 
     global _start
@@ -23,6 +30,20 @@ section .text
 _start:
 
     ; First input structure
+
+    ; newline
+    mov rax, 1
+    mov rdi, 1
+    mov rsi, newline
+    mov rdx, len_newline
+    syscall 
+
+    ; Separator 
+    mov rax, 1 
+    mov rdi, 1 
+    mov rsi, separator 
+    mov rdx, len_separator
+    syscall 
     
     ; Print first sentence
     mov rax, 1
@@ -68,6 +89,13 @@ _start:
     mov rdx, 2 ; size of reserved memory
     syscall 
 
+    ; Separator 
+    mov rax, 1 
+    mov rdi, 1 
+    mov rsi, separator 
+    mov rdx, len_separator
+    syscall 
+
     ; First number converter 
     mov rsi, num1 
     call str_to_int
@@ -86,7 +114,9 @@ _start:
     je .sub 
     cmp al, '*'
     je .mult 
-    jmp .fim  ; if invalid, exits 
+    cmp al, '/'       ; verifies division 
+    je .div 
+    jmp .fim          ; if invalid, exits 
 
 .soma:
     mov rax, rbx 
@@ -103,9 +133,17 @@ _start:
     imul rax, rcx 
     jmp .show 
 
+
+.div: 
+    xor rdx, rdx ; rdx = 0 before division 
+    mov rax, rbx ; move first numer to RAX 
+    div rcx      ; divides RDX;RAX for RCX
+    jmp .show    ; jump to show result    
+
 .show:
     mov rdi, result
     call int_to_str
+
 
     ; Print "Result" Message
     mov rax, 1 
@@ -120,6 +158,22 @@ _start:
     mov rsi, result 
     mov rdx, 20 ; size in memory 
     syscall 
+
+    ; Separator 
+    mov rax, 1 
+    mov rdi, 1 
+    mov rsi, separator 
+    mov rdx, len_separator
+    syscall 
+
+; newline
+    mov rax, 1
+    mov rdi, 1
+    mov rsi, newline
+    mov rdx, len_newline
+    syscall 
+
+
 
 .fim:
 
