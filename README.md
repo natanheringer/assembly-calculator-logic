@@ -1,9 +1,13 @@
 # assembly-calculator-logic
 
-Assembly Calculator
+## Assembly Calculator
 
 This is a simple calculator written in x86-64 Assembly (NASM syntax) for Linux environments.
 It accepts two numbers and an operation (+, -, *) as input via the terminal, performs the calculation, and displays the result.
+
+Expected output (WSL)
+![image](https://github.com/user-attachments/assets/a58e0721-85af-49d2-b490-8d8bba1a6c74)
+
 
 Features:
 
@@ -11,7 +15,7 @@ String input from user
 
 Integer conversion
 
-Addition, subtraction, and multiplication
+Addition, subtraction, multiplication and division.
 
 String output with result
 
